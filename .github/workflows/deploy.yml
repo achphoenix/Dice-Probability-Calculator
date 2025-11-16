@@ -29,6 +29,9 @@ jobs:
         working-directory: ./dice-probability-calculator
         run: npm run build -- --base-href=/Dice-Probability-Calculator/
       
+      - name: Add .nojekyll file
+        run: touch ./dice-probability-calculator/dist/dice-probability-calculator/browser/.nojekyll
+      
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
