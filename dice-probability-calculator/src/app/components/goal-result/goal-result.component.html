@@ -1,0 +1,5 @@
+<div class="goal-result" *ngIf="goalResult">
+  <p>
+    Your chance of rolling {{ goalResult.displayText }} is {{ formatPercentage(goalResult.probability, goalResult.percentage) }}%
+  </p>
+</div>

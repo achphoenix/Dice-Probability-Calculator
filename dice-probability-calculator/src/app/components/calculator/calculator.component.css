@@ -1,0 +1,96 @@
+.calculator-container {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.left-column,
+.right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Mobile view: use display: contents to flatten the columns and reorder all children */
+@media (max-width: 1023px) {
+  .left-column,
+  .right-column {
+    display: contents;
+  }
+  
+  /* Order left column input groups first */
+  .left-column > .input-group:nth-of-type(1) {
+    order: 1;
+  }
+  
+  .left-column > .input-group:nth-of-type(2) {
+    order: 2;
+  }
+  
+  .left-column > .input-group:nth-of-type(3) {
+    order: 3;
+  }
+  
+  /* Then right column elements */
+  .right-column > .input-group:nth-of-type(1) {
+    order: 4;
+  }
+  
+  .right-column > .input-group:nth-of-type(2) {
+    order: 5;
+  }
+  
+  .right-column > app-goal-result {
+    order: 6;
+  }
+  
+  /* Finally the table at the very end */
+  .left-column > app-probability-table {
+    order: 7;
+  }
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.input-group label {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.input-group select,
+.input-group input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  min-height: 44px;
+}
+
+.input-group select:focus,
+.input-group input:focus {
+  outline: 2px solid #007bff;
+  border-color: #007bff;
+}
+
+@media (min-width: 1024px) {
+  .calculator-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+
+  .left-column,
+  .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+}

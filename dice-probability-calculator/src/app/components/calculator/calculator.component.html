@@ -1,0 +1,68 @@
+<div class="calculator-container">
+  <div class="left-column">
+    <div class="input-group">
+      <label for="dice-count">Number of Dice:</label>
+      <select 
+        id="dice-count" 
+        [value]="calculatorService.diceCount()"
+        (change)="onDiceCountChange($any($event.target).value)">
+        <option *ngFor="let count of diceCountOptions" [value]="count">{{ count }}</option>
+      </select>
+    </div>
+
+    <div class="input-group">
+      <label for="dice-type">Dice Type:</label>
+      <select 
+        id="dice-type"
+        [value]="calculatorService.diceType() ?? ''"
+        (change)="onDiceTypeChange($any($event.target).value)">
+        <option value="" disabled>Select di(c)e</option>
+        <option *ngFor="let option of diceOptions" [value]="option.value">
+          {{ option.label }}
+        </option>
+      </select>
+    </div>
+
+    <div class="input-group">
+      <label for="modifier">Modifier (Optional):</label>
+      <input 
+        type="text" 
+        id="modifier"
+        [value]="calculatorService.modifier() || ''"
+        (input)="onModifierChange($any($event.target).value)"
+        placeholder="e.g., +5 or -2">
+    </div>
+
+    <app-probability-table 
+      [results]="calculatorService.probabilityResults()"
+      [goalNumber]="calculatorService.goalNumber()"
+      [goalComparison]="calculatorService.goalComparison()"></app-probability-table>
+  </div>
+
+  <div class="right-column">
+    <div class="input-group">
+      <label for="goal-number">Goal (Optional):</label>
+      <input 
+        type="text" 
+        id="goal-number"
+        [value]="calculatorService.goalNumber() ?? ''"
+        (input)="onGoalNumberChange($any($event.target).value)"
+        placeholder="Optional">
+    </div>
+
+    <div class="input-group">
+      <label for="goal-comparison">Goal Comparison:</label>
+      <select 
+        id="goal-comparison"
+        [value]="calculatorService.goalComparison()"
+        [disabled]="calculatorService.goalNumber() === null"
+        (change)="onGoalComparisonChange($any($event.target).value)">
+        <option *ngFor="let option of goalComparisonOptions" [value]="option.value">
+          {{ option.label }}
+        </option>
+      </select>
+    </div>
+
+    <app-goal-result [goalResult]="calculatorService.goalResult()"></app-goal-result>
+  </div>
+</div>

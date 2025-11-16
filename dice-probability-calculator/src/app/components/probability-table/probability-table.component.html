@@ -1,0 +1,20 @@
+<div class="table-container" *ngIf="_results().length > 0">
+  <table>
+    <thead>
+      <tr>
+        <th (click)="toggleSort('result')" class="sortable">
+          Result {{ getSortIcon('result') }}
+        </th>
+        <th (click)="toggleSort('percentage')" class="sortable">
+          % Chance {{ getSortIcon('percentage') }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of sortedResults()" [class.highlighted]="shouldHighlight(row.result)">
+        <td>{{ row.result }}</td>
+        <td>{{ formatPercentage(row.probability, row.percentage) }}%</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
