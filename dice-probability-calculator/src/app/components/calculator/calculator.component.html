@@ -50,12 +50,11 @@
         placeholder="Optional">
     </div>
 
-    <div class="input-group">
+    <div class="input-group" *ngIf="calculatorService.goalNumber() !== null">
       <label for="goal-comparison">Goal Comparison:</label>
       <select 
         id="goal-comparison"
         [value]="calculatorService.goalComparison()"
-        [disabled]="calculatorService.goalNumber() === null"
         (change)="onGoalComparisonChange($any($event.target).value)">
         <option *ngFor="let option of goalComparisonOptions" [value]="option.value">
           {{ option.label }}
