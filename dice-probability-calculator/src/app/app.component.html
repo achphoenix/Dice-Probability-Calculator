@@ -1,3 +1,6 @@
+<button class="theme-toggle" (click)="toggleTheme()" [attr.aria-label]="isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'">
+  <span class="icon">{{ isDarkMode ? '☀️' : '🌙' }}</span>
+</button>
 <div class="app-container">
   <h1>Dice Probability Calculator</h1>
   <app-calculator></app-calculator>

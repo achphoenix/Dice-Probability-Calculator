@@ -8,6 +8,7 @@ table {
   width: 100%;
   border-collapse: collapse;
   background: white;
+  transition: background-color 0.3s ease;
 }
 
 thead th {
@@ -16,6 +17,7 @@ thead th {
   text-align: left;
   font-weight: 600;
   border-bottom: 2px solid #ddd;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 thead th.sortable {
@@ -30,10 +32,12 @@ thead th.sortable:hover {
 tbody td {
   padding: 8px 10px;
   border-bottom: 1px solid #eee;
+  transition: border-color 0.3s ease;
 }
 
 tbody tr:nth-child(even) {
   background-color: #f9f9f9;
+  transition: background-color 0.3s ease;
 }
 
 tbody tr:hover {
@@ -46,4 +50,40 @@ tbody tr.highlighted {
 
 tbody tr.highlighted:hover {
   background-color: rgba(144, 238, 144, 0.5);
+}
+
+/* Dark mode styles */
+:host-context(body.dark-mode) table {
+  background: #2a2a2a;
+}
+
+:host-context(body.dark-mode) thead th {
+  background-color: #1a1a1a;
+  border-bottom-color: #444;
+  color: #e0e0e0;
+}
+
+:host-context(body.dark-mode) thead th.sortable:hover {
+  background-color: #333;
+}
+
+:host-context(body.dark-mode) tbody td {
+  border-bottom-color: #333;
+  color: #e0e0e0;
+}
+
+:host-context(body.dark-mode) tbody tr:nth-child(even) {
+  background-color: #252525;
+}
+
+:host-context(body.dark-mode) tbody tr:hover {
+  background-color: #333;
+}
+
+:host-context(body.dark-mode) tbody tr.highlighted {
+  background-color: rgba(76, 175, 80, 0.3);
+}
+
+:host-context(body.dark-mode) tbody tr.highlighted:hover {
+  background-color: rgba(76, 175, 80, 0.4);
 }
