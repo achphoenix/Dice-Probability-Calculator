@@ -1,27 +1,18 @@
 .goal-result {
   padding: 20px;
-  background-color: #e7f3ff;
+  background-color: var(--result-bg, #e7f3ff);
   border-radius: 8px;
-  border-left: 4px solid #007bff;
-  transition: background-color 0.3s ease;
+  border-left: 4px solid var(--result-border, #007bff);
+  transition: all 0.3s ease;
 }
 
 .goal-result p {
   font-size: 20px;
   font-weight: 600;
-  color: #0056b3;
+  color: var(--result-color, #0056b3);
   text-align: center;
   margin: 0;
   transition: color 0.3s ease;
-}
-
-:host-context(body.dark-mode) .goal-result {
-  background-color: #1a3a52;
-  border-left-color: #4da6ff;
-}
-
-:host-context(body.dark-mode) .goal-result p {
-  color: #66b3ff;
 }
 
 @media (min-width: 1024px) {

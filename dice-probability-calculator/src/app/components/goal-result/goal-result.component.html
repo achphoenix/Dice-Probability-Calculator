@@ -1,4 +1,4 @@
-<div class="goal-result" *ngIf="goalResult">
+<div class="goal-result" *ngIf="goalResult" [ngStyle]="getColorStyle(goalResult.percentage)">
   <p>
     Your chance of rolling {{ goalResult.displayText }}{{ getRollModeText(goalResult.rollMode) }} is {{ formatPercentage(goalResult.probability, goalResult.percentage) }}%
   </p>
