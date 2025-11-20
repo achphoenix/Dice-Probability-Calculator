@@ -62,16 +62,19 @@
       </select>
     </div>
 
-    <div class="input-group" *ngIf="calculatorService.goalNumber() !== null">
+    <div class="input-group roll-mode-group" *ngIf="calculatorService.goalNumber() !== null">
       <label for="roll-mode">Roll Mode:</label>
-      <select 
-        id="roll-mode"
-        [value]="calculatorService.rollMode()"
-        (change)="onRollModeChange($any($event.target).value)">
-        <option *ngFor="let option of rollModeOptions" [value]="option.value">
-          {{ option.label }}
-        </option>
-      </select>
+      <div class="pill-toggle" 
+           (click)="cycleRollMode()" 
+           [attr.data-mode]="calculatorService.rollMode()"
+           [title]="getRollModeLabel()">
+        <span class="pill-label pill-label-left">N</span>
+        <span class="pill-label pill-label-center">A</span>
+        <span class="pill-label pill-label-right">D</span>
+        <div class="pill-circle">
+          <span class="pill-icon">{{ getRollModeIcon() }}</span>
+        </div>
+      </div>
     </div>
 
     <app-goal-result [goalResult]="calculatorService.goalResult()"></app-goal-result>

@@ -82,4 +82,37 @@ export class CalculatorComponent {
   onRollModeChange(mode: string): void {
     this.calculatorService.setRollMode(mode as RollMode);
   }
+
+  cycleRollMode(): void {
+    const currentMode = this.calculatorService.rollMode();
+    const modes: RollMode[] = ['normal', 'advantage', 'disadvantage'];
+    const currentIndex = modes.indexOf(currentMode);
+    const nextIndex = (currentIndex + 1) % modes.length;
+    // Set mode immediately so calculation happens instantly
+    this.calculatorService.setRollMode(modes[nextIndex]);
+  }
+
+  getRollModeIcon(): string {
+    const mode = this.calculatorService.rollMode();
+    switch(mode) {
+      case 'advantage':
+        return '⇈';
+      case 'disadvantage':
+        return '⇊';
+      default:
+        return '';
+    }
+  }
+
+  getRollModeLabel(): string {
+    const mode = this.calculatorService.rollMode();
+    switch(mode) {
+      case 'advantage':
+        return 'Advantage';
+      case 'disadvantage':
+        return 'Disadvantage';
+      default:
+        return 'Normal - No Advantage or Disadvantage';
+    }
+  }
 }

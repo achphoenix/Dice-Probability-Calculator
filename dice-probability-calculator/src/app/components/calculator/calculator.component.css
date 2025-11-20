@@ -50,8 +50,12 @@
     order: 5;
   }
   
-  .right-column > app-goal-result {
+  .right-column > .roll-mode-group {
     order: 6;
+  }
+  
+  .right-column > app-goal-result {
+    order: 7;
   }
   
   /* Finally the table at the very end */
@@ -88,6 +92,131 @@
 
 :host-context(body.dark-mode) .input-group label {
   color: #e0e0e0;
+}
+
+/* Pill Toggle Styles */
+.pill-toggle {
+  position: relative;
+  width: 120px;
+  height: 44px;
+  background: #e0e0e0;
+  border-radius: 22px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: 1px solid #ccc;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+}
+
+.pill-label {
+  position: absolute;
+  font-size: 11px;
+  font-weight: 600;
+  color: #999;
+  user-select: none;
+  z-index: 1;
+  transition: opacity 0.3s ease;
+}
+
+.pill-label-left {
+  left: 12px;
+}
+
+.pill-label-center {
+  left: 54px;
+}
+
+.pill-label-right {
+  right: 12px;
+}
+
+/* Hide label when circle is over it */
+.pill-toggle[data-mode="normal"] .pill-label-left,
+.pill-toggle[data-mode="advantage"] .pill-label-center,
+.pill-toggle[data-mode="disadvantage"] .pill-label-right {
+  opacity: 0;
+}
+
+:host-context(body.dark-mode) .pill-toggle {
+  background: #1a1a1a;
+  border-color: #444;
+}
+
+:host-context(body.dark-mode) .pill-label {
+  color: #666;
+}
+
+.pill-circle {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  background: white;
+  border-radius: 50%;
+  top: 3px;
+  left: 3px;
+  transition: left 0.3s ease, background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  z-index: 2;
+}
+
+.pill-icon {
+  font-size: 24px;
+  line-height: 1;
+  user-select: none;
+}
+
+/* Darker arrow colors for better contrast */
+.pill-toggle[data-mode="advantage"] .pill-icon {
+  color: #155724;
+}
+
+.pill-toggle[data-mode="disadvantage"] .pill-icon {
+  color: #8b0000;
+}
+
+/* Normal mode - circle on the left (muted yellow) */
+.pill-toggle[data-mode="normal"] .pill-circle {
+  left: 3px;
+  background: #d89b3d;
+}
+
+/* Advantage mode - circle in the center (green) */
+.pill-toggle[data-mode="advantage"] .pill-circle {
+  left: 42px;
+  background: #28a745;
+}
+
+/* Disadvantage mode - circle on the right (red) */
+.pill-toggle[data-mode="disadvantage"] .pill-circle {
+  left: 81px;
+  background: #dc3545;
+}
+
+.pill-toggle:hover {
+  opacity: 0.9;
+}
+
+.pill-toggle:active .pill-circle {
+  transform: scale(0.95);
+}
+
+/* Desktop: Roll mode label and pill inline */
+@media (min-width: 1024px) {
+  .roll-mode-group {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .roll-mode-group label {
+    margin-bottom: 0;
+  }
 }
 
 @media (min-width: 1024px) {
