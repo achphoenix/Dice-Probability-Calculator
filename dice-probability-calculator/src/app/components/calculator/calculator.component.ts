@@ -2,10 +2,10 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CalculatorService } from '../../services/calculator.service';
-import { DICE_OPTIONS, DICE_COUNT_OPTIONS, GOAL_COMPARISON_OPTIONS } from '../../constants/dice.constants';
+import { DICE_OPTIONS, DICE_COUNT_OPTIONS, GOAL_COMPARISON_OPTIONS, ROLL_MODE_OPTIONS } from '../../constants/dice.constants';
 import { ProbabilityTableComponent } from '../probability-table/probability-table.component';
 import { GoalResultComponent } from '../goal-result/goal-result.component';
-import { DiceType, GoalComparison } from '../../models/types';
+import { DiceType, GoalComparison, RollMode } from '../../models/types';
 
 @Component({
   selector: 'app-calculator',
@@ -20,6 +20,7 @@ export class CalculatorComponent {
   diceOptions = DICE_OPTIONS;
   diceCountOptions = DICE_COUNT_OPTIONS;
   goalComparisonOptions = GOAL_COMPARISON_OPTIONS;
+  rollModeOptions = ROLL_MODE_OPTIONS;
 
   onDiceCountChange(count: string): void {
     this.calculatorService.setDiceCount(Number(count));
@@ -76,5 +77,9 @@ export class CalculatorComponent {
 
   onGoalComparisonChange(comparison: string): void {
     this.calculatorService.setGoalComparison(comparison as GoalComparison);
+  }
+
+  onRollModeChange(mode: string): void {
+    this.calculatorService.setRollMode(mode as RollMode);
   }
 }

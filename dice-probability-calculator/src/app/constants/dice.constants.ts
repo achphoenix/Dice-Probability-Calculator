@@ -1,4 +1,4 @@
-import { DiceOption, GoalComparisonOption } from '../models/types';
+import { DiceOption, GoalComparisonOption, RollModeOption } from '../models/types';
 
 export const DICE_OPTIONS: DiceOption[] = [
   { value: 'd2', label: 'D2 / Coin', sides: 2 },
@@ -15,6 +15,12 @@ export const GOAL_COMPARISON_OPTIONS: GoalComparisonOption[] = [
   { value: 'orHigher', label: 'Or Higher' },
   { value: 'orLower', label: 'Or Lower' },
   { value: 'exactly', label: 'Exactly' }
+];
+
+export const ROLL_MODE_OPTIONS: RollModeOption[] = [
+  { value: 'normal', label: 'Normal' },
+  { value: 'advantage', label: 'Advantage' },
+  { value: 'disadvantage', label: 'Disadvantage' }
 ];
 
 export const DICE_COUNT_OPTIONS: number[] = Array.from({ length: 100 }, (_, i) => i + 1);

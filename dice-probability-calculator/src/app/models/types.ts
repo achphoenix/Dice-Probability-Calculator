@@ -22,9 +22,18 @@ export interface GoalComparisonOption {
   label: string;
 }
 
+// Roll mode (normal, advantage, disadvantage)
+export type RollMode = 'normal' | 'advantage' | 'disadvantage';
+
+export interface RollModeOption {
+  value: RollMode;
+  label: string;
+}
+
 export interface GoalResult {
   goalNumber: number;
   comparison: GoalComparison;
+  rollMode: RollMode;
   probability: number;
   percentage: number;
   displayText: string;

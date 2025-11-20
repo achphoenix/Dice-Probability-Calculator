@@ -2,7 +2,7 @@ import { Injectable, signal, effect } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { ProbabilityEngine } from './probability-engine.service';
-import { DiceType, GoalComparison, ProbabilityResult, GoalResult } from '../models/types';
+import { DiceType, GoalComparison, ProbabilityResult, GoalResult, RollMode } from '../models/types';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,7 @@ export class CalculatorService {
   modifier = signal<number>(0);
   goalNumber = signal<number | null>(null);
   goalComparison = signal<GoalComparison>('orHigher');
+  rollMode = signal<RollMode>('normal');
   probabilityResults = signal<ProbabilityResult[]>([]);
   isCalculating = signal<boolean>(false);
   goalResult = signal<GoalResult | null>(null);
@@ -39,6 +40,7 @@ export class CalculatorService {
       const results = this.probabilityResults();
       const goal = this.goalNumber();
       const comparison = this.goalComparison();
+      const mode = this.rollMode();
 
       if (results.length > 0 && goal !== null) {
         this.calculateGoalResult();
@@ -67,12 +69,23 @@ export class CalculatorService {
 
   setGoalNumber(goal: number | null): void {
     this.goalNumber.set(goal);
+    // Reset goal-related inputs to defaults when goal is cleared
+    if (goal === null) {
+      this.goalComparison.set('orHigher');
+      // Use setRollMode to ensure calculation is triggered
+      this.setRollMode('normal');
+    }
     // Goal calculation happens via effect
   }
 
   setGoalComparison(comparison: GoalComparison): void {
     this.goalComparison.set(comparison);
     // Goal calculation happens via effect
+  }
+
+  setRollMode(mode: RollMode): void {
+    this.rollMode.set(mode);
+    this.triggerCalculation();
   }
 
   // Trigger calculation (cancel current and emit to debounced subject)
@@ -111,6 +124,7 @@ export class CalculatorService {
         count,
         sides,
         mod,
+        this.rollMode(),
         this.currentCancellationToken
       );
 
@@ -165,6 +179,7 @@ export class CalculatorService {
     this.goalResult.set({
       goalNumber: goal,
       comparison,
+      rollMode: this.rollMode(),
       probability: probability, // Raw probability (0-1 range)
       percentage: percentage, // Rounded percentage (0-100 range)
       displayText

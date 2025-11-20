@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ProbabilityResult, GoalComparison } from '../models/types';
+import { ProbabilityResult, GoalComparison, RollMode } from '../models/types';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +12,49 @@ export class ProbabilityEngine {
    * @param diceCount Number of dice to roll
    * @param diceType Number of sides on each die
    * @param modifier Modifier to add to results
+   * @param rollMode Whether to roll normally, with advantage, or with disadvantage
    * @param cancelSignal Object to check if calculation should be cancelled
+   * 
+   * NOTE: When mixed dice types are added in the future, advantage/disadvantage
+   * should apply to the entire roll (roll all dice twice, sum each set, take higher/lower)
    */
   async calculateDistribution(
+    diceCount: number,
+    diceType: number,
+    modifier: number,
+    rollMode: RollMode,
+    cancelSignal: { cancelled: boolean }
+  ): Promise<ProbabilityResult[]> {
+    // Calculate base distribution (normal roll)
+    const baseDistribution = await this.calculateBaseDistribution(
+      diceCount,
+      diceType,
+      modifier,
+      cancelSignal
+    );
+
+    if (cancelSignal.cancelled || baseDistribution.length === 0) {
+      return [];
+    }
+
+    // If normal mode, return base distribution
+    if (rollMode === 'normal') {
+      return baseDistribution;
+    }
+
+    // For advantage/disadvantage, we need to calculate the distribution of
+    // rolling twice and taking the higher/lower value
+    return this.calculateAdvantageDisadvantageDistribution(
+      baseDistribution,
+      rollMode,
+      cancelSignal
+    );
+  }
+
+  /**
+   * Calculate base probability distribution for a single roll
+   */
+  private async calculateBaseDistribution(
     diceCount: number,
     diceType: number,
     modifier: number,
@@ -71,6 +111,58 @@ export class ProbabilityEngine {
     const results: ProbabilityResult[] = [];
     for (const [result, probability] of resultsWithModifier) {
       const percentage = Math.round(probability * 1000) / 10; // Round to 1 decimal place
+      
+      results.push({
+        result,
+        probability,
+        percentage
+      });
+    }
+
+    // Sort by result value (ascending)
+    results.sort((a, b) => a.result - b.result);
+
+    return results;
+  }
+
+  /**
+   * Calculate advantage/disadvantage distribution
+   * Advantage: Roll twice, take higher
+   * Disadvantage: Roll twice, take lower
+   */
+  private calculateAdvantageDisadvantageDistribution(
+    baseDistribution: ProbabilityResult[],
+    rollMode: RollMode,
+    cancelSignal: { cancelled: boolean }
+  ): ProbabilityResult[] {
+    const newDistribution = new Map<number, number>();
+
+    // For each possible outcome of first roll
+    for (const first of baseDistribution) {
+      if (cancelSignal.cancelled) {
+        return [];
+      }
+
+      // For each possible outcome of second roll
+      for (const second of baseDistribution) {
+        // Determine which value to take based on advantage/disadvantage
+        const takenValue = rollMode === 'advantage' 
+          ? Math.max(first.result, second.result)
+          : Math.min(first.result, second.result);
+
+        // Combined probability is product of individual probabilities
+        const combinedProb = first.probability * second.probability;
+
+        // Add to distribution
+        const currentProb = newDistribution.get(takenValue) || 0;
+        newDistribution.set(takenValue, currentProb + combinedProb);
+      }
+    }
+
+    // Convert to array
+    const results: ProbabilityResult[] = [];
+    for (const [result, probability] of newDistribution) {
+      const percentage = Math.round(probability * 1000) / 10;
       
       results.push({
         result,
