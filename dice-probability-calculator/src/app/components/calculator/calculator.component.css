@@ -60,7 +60,7 @@
   
   /* Finally the table at the very end */
   .left-column > app-probability-table {
-    order: 7;
+    order: 8;
   }
 }
 
