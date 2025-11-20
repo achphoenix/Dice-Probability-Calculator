@@ -11,7 +11,9 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let row of sortedResults()" [class.highlighted]="shouldHighlight(row.result)">
+      <tr *ngFor="let row of sortedResults()" 
+          [class.highlighted]="shouldHighlight(row.result)"
+          [class.bold-row]="shouldBeBold(row.result)">
         <td>{{ row.result }}</td>
         <td>{{ formatPercentage(row.probability, row.percentage) }}%</td>
       </tr>

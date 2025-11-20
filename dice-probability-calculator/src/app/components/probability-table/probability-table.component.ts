@@ -40,6 +40,25 @@ export class ProbabilityTableComponent {
     });
   });
 
+  highestPercentageResults = computed(() => {
+    const results = this._results();
+    if (results.length === 0) return new Set<number>();
+
+    // Find the maximum percentage
+    const maxPercentage = Math.max(...results.map(r => r.percentage));
+    
+    // Find all results with this maximum percentage
+    const maxResults = results.filter(r => r.percentage === maxPercentage);
+    
+    // Only return the set if there are 1-3 results with max percentage
+    // Return empty set if 4 or more (no bolding)
+    if (maxResults.length >= 1 && maxResults.length <= 3) {
+      return new Set(maxResults.map(r => r.result));
+    }
+    
+    return new Set<number>();
+  });
+
   toggleSort(column: 'result' | 'percentage'): void {
     if (this.sortColumn() === column) {
       // Toggle direction
@@ -83,5 +102,9 @@ export class ProbabilityTableComponent {
       default:
         return false;
     }
+  }
+
+  shouldBeBold(result: number): boolean {
+    return this.highestPercentageResults().has(result);
   }
 }

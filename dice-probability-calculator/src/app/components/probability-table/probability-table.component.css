@@ -52,6 +52,10 @@ tbody tr.highlighted:hover {
   background-color: rgba(144, 238, 144, 0.5);
 }
 
+tbody tr.bold-row {
+  font-weight: bold;
+}
+
 /* Dark mode styles */
 :host-context(body.dark-mode) table {
   background: #2a2a2a;
