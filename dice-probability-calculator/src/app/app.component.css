@@ -26,6 +26,73 @@
   line-height: 1;
 }
 
+.scroll-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+  background-color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease;
+}
+
+.scroll-to-top:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.scroll-to-top .arrow {
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.scroll-to-top .text {
+  display: none; /* Hidden on mobile */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Desktop view - show text alongside arrow */
+@media (min-width: 1024px) {
+  .scroll-to-top {
+    width: auto;
+    height: auto;
+    padding: 12px 20px;
+    border-radius: 25px;
+    gap: 8px;
+  }
+
+  .scroll-to-top .text {
+    display: inline;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .scroll-to-top .arrow {
+    font-size: 18px;
+  }
+}
+
 .app-container {
   max-width: 1200px;
   margin: 0 auto;
