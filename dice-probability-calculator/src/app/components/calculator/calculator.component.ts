@@ -28,7 +28,8 @@ export class CalculatorComponent {
   onDiceTypeChange(type: string): void {
     if (type === '') {
       this.calculatorService.setDiceType(null);
-    } else {
+    }
+    else {
       this.calculatorService.setDiceType(type as DiceType);
     }
   }

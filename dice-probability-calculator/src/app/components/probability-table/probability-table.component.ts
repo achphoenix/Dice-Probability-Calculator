@@ -42,7 +42,9 @@ export class ProbabilityTableComponent {
 
   highestPercentageResults = computed(() => {
     const results = this._results();
-    if (results.length === 0) return new Set<number>();
+    if (results.length === 0) {
+      return new Set<number>();
+    }
 
     // Find the maximum percentage
     const maxPercentage = Math.max(...results.map(r => r.percentage));
@@ -63,7 +65,8 @@ export class ProbabilityTableComponent {
     if (this.sortColumn() === column) {
       // Toggle direction
       this.sortDirection.set(this.sortDirection() === 'asc' ? 'desc' : 'asc');
-    } else {
+    }
+    else {
       // Change column, reset to ascending
       this.sortColumn.set(column);
       this.sortDirection.set('asc');
@@ -71,7 +74,9 @@ export class ProbabilityTableComponent {
   }
 
   getSortIcon(column: 'result' | 'percentage'): string {
-    if (this.sortColumn() !== column) return '';
+    if (this.sortColumn() !== column) {
+      return '';
+    }
     return this.sortDirection() === 'asc' ? '↑' : '↓';
   }
 

@@ -39,7 +39,8 @@ export class AppComponent implements OnInit {
   private applyTheme() {
     if (this.isDarkMode) {
       document.body.classList.add('dark-mode');
-    } else {
+    }
+    else {
       document.body.classList.remove('dark-mode');
     }
   }

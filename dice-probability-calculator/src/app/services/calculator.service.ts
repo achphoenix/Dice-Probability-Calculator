@@ -42,7 +42,8 @@ export class CalculatorService {
 
       if (results.length > 0 && goal !== null) {
         this.calculateGoalResult();
-      } else {
+      }
+      else {
         this.goalResult.set(null);
       }
     });
@@ -117,10 +118,12 @@ export class CalculatorService {
       if (!this.currentCancellationToken.cancelled) {
         this.probabilityResults.set(results);
       }
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Error calculating probability distribution:', error);
       this.probabilityResults.set([]);
-    } finally {
+    }
+    finally {
       this.isCalculating.set(false);
     }
   }
