@@ -62,17 +62,29 @@
       </select>
     </div>
 
-    <div class="input-group roll-mode-group" *ngIf="calculatorService.goalNumber() !== null">
+    <div class="input-group roll-mode-group">
       <label for="roll-mode">Roll Mode:</label>
-      <div class="pill-toggle" 
-           (click)="cycleRollMode()" 
-           [attr.data-mode]="calculatorService.rollMode()"
-           [title]="getRollModeLabel()">
-        <span class="pill-label pill-label-left">N</span>
-        <span class="pill-label pill-label-center">A</span>
-        <span class="pill-label pill-label-right">D</span>
-        <div class="pill-circle">
-          <span class="pill-icon">{{ getRollModeIcon() }}</span>
+      <div class="roll-mode-controls">
+        <div class="pill-toggle" 
+             (click)="cycleRollMode()" 
+             [attr.data-mode]="calculatorService.rollMode()"
+             [title]="getRollModeLabel()">
+          <span class="pill-label pill-label-left">N</span>
+          <span class="pill-label pill-label-center">A</span>
+          <span class="pill-label pill-label-right">D</span>
+          <div class="pill-circle">
+            <span class="pill-icon">{{ getRollModeIcon() }}</span>
+          </div>
+        </div>
+        <div class="roll-mode-info">
+          <span class="roll-mode-text">{{ getRollModeLabel() }}</span>
+          <span class="info-icon" title="">ⓘ
+            <span class="info-tooltip">
+              <strong>Normal Roll:</strong> Roll the dice once and use the result.<br><br>
+              <strong>Advantage:</strong> Roll twice and use the higher result.<br><br>
+              <strong>Disadvantage:</strong> Roll twice and use the lower result.
+            </span>
+          </span>
         </div>
       </div>
     </div>

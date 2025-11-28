@@ -112,7 +112,7 @@ export class CalculatorComponent {
       case 'disadvantage':
         return 'Disadvantage';
       default:
-        return 'Normal - No Advantage or Disadvantage';
+        return 'Normal Roll';
     }
   }
 }

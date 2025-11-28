@@ -206,6 +206,93 @@
   transform: scale(0.95);
 }
 
+/* Roll mode controls wrapper */
+.roll-mode-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.roll-mode-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.roll-mode-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+}
+
+:host-context(body.dark-mode) .roll-mode-text {
+  color: #e0e0e0;
+}
+
+.info-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  font-size: 16px;
+  color: #007bff;
+  cursor: help;
+  user-select: none;
+}
+
+:host-context(body.dark-mode) .info-icon {
+  color: #4dabf7;
+}
+
+.info-tooltip {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: white;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  width: 280px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 1000;
+  text-align: left;
+  pointer-events: none;
+}
+
+:host-context(body.dark-mode) .info-tooltip {
+  background-color: #1a1a1a;
+  border: 1px solid #444;
+}
+
+.info-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #333;
+}
+
+:host-context(body.dark-mode) .info-tooltip::after {
+  border-top-color: #1a1a1a;
+}
+
+.info-icon:hover .info-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
 /* Desktop: Roll mode label and pill inline */
 @media (min-width: 1024px) {
   .roll-mode-group {
