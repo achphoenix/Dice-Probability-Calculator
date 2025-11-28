@@ -10,13 +10,13 @@ import { CommonModule } from '@angular/common';
 })
 export class AppComponent implements OnInit {
   title = 'dice-probability-calculator';
-  isDarkMode = false;
+  isDarkMode = true;
   showScrollToTop = false;
 
   ngOnInit() {
-    // Check for saved theme preference or default to light mode
+    // Check for saved theme preference or default to dark mode
     const savedTheme = localStorage.getItem('theme');
-    this.isDarkMode = savedTheme === 'dark';
+    this.isDarkMode = savedTheme !== 'light';
     this.applyTheme();
   }
 
