@@ -2,7 +2,7 @@ import { Injectable, signal, effect } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { ProbabilityEngine } from './probability-engine.service';
-import { DiceType, GoalComparison, ProbabilityResult, GoalResult, RollMode } from '../models/types';
+import { DiceType, GoalComparison, ProbabilityResult, GoalResult, RollMode, DiceGroup } from '../models/types';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +11,7 @@ export class CalculatorService {
   // Writable signals for application state
   diceCount = signal<number>(1);
   diceType = signal<DiceType | null>(null);
+  diceGroups = signal<DiceGroup[]>([]); // List of mixed dice groups
   modifier = signal<number>(0);
   goalNumber = signal<number | null>(null);
   goalComparison = signal<GoalComparison>('orHigher');
@@ -88,6 +89,39 @@ export class CalculatorService {
     this.triggerCalculation();
   }
 
+  // Add current dice selection to the mixed dice list
+  addDiceGroup(): void {
+    const count = this.diceCount();
+    const type = this.diceType();
+
+    if (count <= 0 || type === null) {
+      return;
+    }
+
+    const sides = parseInt(type.substring(1));
+    const newGroup: DiceGroup = {
+      id: `${Date.now()}-${Math.random()}`,
+      count,
+      type,
+      sides
+    };
+
+    this.diceGroups.update(groups => [...groups, newGroup]);
+    this.triggerCalculation();
+  }
+
+  // Remove a specific dice group from the list
+  removeDiceGroup(id: string): void {
+    this.diceGroups.update(groups => groups.filter(g => g.id !== id));
+    this.triggerCalculation();
+  }
+
+  // Clear all dice groups
+  clearDiceGroups(): void {
+    this.diceGroups.set([]);
+    this.triggerCalculation();
+  }
+
   // Trigger calculation (cancel current and emit to debounced subject)
   private triggerCalculation(): void {
     this.cancelCurrentCalculation();
@@ -102,9 +136,38 @@ export class CalculatorService {
 
   // Execute probability distribution calculation
   private async executeCalculation(): Promise<void> {
+    const groups = this.diceGroups();
+    const mod = this.modifier();
+
+    // If we have dice groups, use mixed dice calculation
+    if (groups.length > 0) {
+      this.isCalculating.set(true);
+
+      try {
+        const results = await this.probabilityEngine.calculateMixedDistribution(
+          groups,
+          mod,
+          this.rollMode(),
+          this.currentCancellationToken
+        );
+
+        if (!this.currentCancellationToken.cancelled) {
+          this.probabilityResults.set(results);
+        }
+      }
+      catch (error) {
+        console.error('Error calculating mixed dice probability distribution:', error);
+        this.probabilityResults.set([]);
+      }
+      finally {
+        this.isCalculating.set(false);
+      }
+      return;
+    }
+
+    // Otherwise, use single dice type calculation
     const count = this.diceCount();
     const type = this.diceType();
-    const mod = this.modifier();
 
     // Validate inputs
     if (count <= 0 || count > 100 || type === null) {

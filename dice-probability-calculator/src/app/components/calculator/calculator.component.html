@@ -23,6 +23,38 @@
       </select>
     </div>
 
+    <div class="input-group dice-list-controls">
+      <button 
+        class="add-dice-button"
+        (click)="addDiceToList()"
+        [disabled]="!canAddDice()"
+        title="Add current dice selection to the list">
+        Add to List
+      </button>
+      <button 
+        class="clear-dice-button"
+        (click)="clearDiceList()"
+        [disabled]="calculatorService.diceGroups().length === 0"
+        title="Clear all dice from the list">
+        Clear List
+      </button>
+    </div>
+
+    <div class="dice-list" *ngIf="calculatorService.diceGroups().length > 0">
+      <div class="dice-list-header">Mixed Dice:</div>
+      <div class="dice-list-items">
+        <div class="dice-item" *ngFor="let group of calculatorService.diceGroups()">
+          <span class="dice-label">{{ getDiceGroupLabel(group.count, group.type) }}</span>
+          <button 
+            class="remove-dice-button" 
+            (click)="removeDiceGroup(group.id)"
+            title="Remove this dice group">
+            ×
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div class="input-group">
       <label for="modifier">Modifier (Optional):</label>
       <input 

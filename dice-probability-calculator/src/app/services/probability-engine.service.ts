@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ProbabilityResult, GoalComparison, RollMode } from '../models/types';
+import { ProbabilityResult, GoalComparison, RollMode, DiceGroup } from '../models/types';
 
 @Injectable({
   providedIn: 'root'
@@ -123,6 +123,163 @@ export class ProbabilityEngine {
     results.sort((a, b) => a.result - b.result);
 
     return results;
+  }
+
+  /**
+   * Calculate probability distribution for mixed dice types
+   * @param diceGroups Array of dice groups (each with count and type)
+   * @param modifier Modifier to add to results
+   * @param rollMode Whether to roll normally, with advantage, or with disadvantage
+   * @param cancelSignal Object to check if calculation should be cancelled
+   */
+  async calculateMixedDistribution(
+    diceGroups: DiceGroup[],
+    modifier: number,
+    rollMode: RollMode,
+    cancelSignal: { cancelled: boolean }
+  ): Promise<ProbabilityResult[]> {
+    if (diceGroups.length === 0) {
+      return [];
+    }
+
+    // Calculate base distribution for mixed dice
+    const baseDistribution = await this.calculateMixedBaseDistribution(
+      diceGroups,
+      modifier,
+      cancelSignal
+    );
+
+    if (cancelSignal.cancelled || baseDistribution.length === 0) {
+      return [];
+    }
+
+    // If normal mode, return base distribution
+    if (rollMode === 'normal') {
+      return baseDistribution;
+    }
+
+    // For advantage/disadvantage, calculate the distribution of rolling twice
+    return this.calculateAdvantageDisadvantageDistribution(
+      baseDistribution,
+      rollMode,
+      cancelSignal
+    );
+  }
+
+  /**
+   * Calculate base probability distribution for mixed dice types
+   */
+  private async calculateMixedBaseDistribution(
+    diceGroups: DiceGroup[],
+    modifier: number,
+    cancelSignal: { cancelled: boolean }
+  ): Promise<ProbabilityResult[]> {
+    // Start with a distribution representing "0" with probability 1
+    let distribution = new Map<number, number>();
+    distribution.set(0, 1);
+
+    // Process each dice group
+    for (const group of diceGroups) {
+      if (cancelSignal.cancelled) {
+        return [];
+      }
+
+      // Calculate distribution for this group
+      const groupDistribution = await this.calculateSingleGroupDistribution(
+        group.count,
+        group.sides,
+        cancelSignal
+      );
+
+      if (cancelSignal.cancelled) {
+        return [];
+      }
+
+      // Convolve with existing distribution
+      const newDistribution = new Map<number, number>();
+      
+      for (const [existingValue, existingProb] of distribution) {
+        for (const [groupValue, groupProb] of groupDistribution) {
+          const newValue = existingValue + groupValue;
+          const newProb = existingProb * groupProb;
+          
+          const currentProb = newDistribution.get(newValue) || 0;
+          newDistribution.set(newValue, currentProb + newProb);
+        }
+      }
+      
+      distribution = newDistribution;
+
+      // Yield to UI
+      await new Promise(resolve => setTimeout(resolve, 0));
+    }
+
+    // Apply modifier
+    const resultsWithModifier = new Map<number, number>();
+    for (const [value, prob] of distribution) {
+      resultsWithModifier.set(value + modifier, prob);
+    }
+
+    // Convert to array
+    const results: ProbabilityResult[] = [];
+    for (const [result, probability] of resultsWithModifier) {
+      const percentage = Math.round(probability * 1000) / 10;
+      
+      results.push({
+        result,
+        probability,
+        percentage
+      });
+    }
+
+    // Sort by result value
+    results.sort((a, b) => a.result - b.result);
+
+    return results;
+  }
+
+  /**
+   * Calculate distribution for a single group of identical dice
+   */
+  private async calculateSingleGroupDistribution(
+    count: number,
+    sides: number,
+    cancelSignal: { cancelled: boolean }
+  ): Promise<Map<number, number>> {
+    let distribution = new Map<number, number>();
+    
+    // Initialize with first die
+    for (let i = 1; i <= sides; i++) {
+      distribution.set(i, 1 / sides);
+    }
+
+    // Add remaining dice using convolution
+    for (let die = 2; die <= count; die++) {
+      if (cancelSignal.cancelled) {
+        return new Map();
+      }
+
+      const newDistribution = new Map<number, number>();
+      
+      for (const [existingValue, existingProb] of distribution) {
+        for (let dieValue = 1; dieValue <= sides; dieValue++) {
+          const newValue = existingValue + dieValue;
+          const newProb = existingProb * (1 / sides);
+          
+          const currentProb = newDistribution.get(newValue) || 0;
+          newDistribution.set(newValue, currentProb + newProb);
+        }
+      }
+      
+      distribution = newDistribution;
+      
+      // Yield to UI periodically
+      if (die % 5 === 0) {
+        await new Promise(resolve => setTimeout(resolve, 0));
+      }
+    }
+
+    return distribution;
   }
 
   /**

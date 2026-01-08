@@ -115,4 +115,25 @@ export class CalculatorComponent {
         return 'Normal Roll';
     }
   }
+
+  // Mixed dice methods
+  addDiceToList(): void {
+    this.calculatorService.addDiceGroup();
+  }
+
+  removeDiceGroup(id: string): void {
+    this.calculatorService.removeDiceGroup(id);
+  }
+
+  clearDiceList(): void {
+    this.calculatorService.clearDiceGroups();
+  }
+
+  canAddDice(): boolean {
+    return this.calculatorService.diceCount() > 0 && this.calculatorService.diceType() !== null;
+  }
+
+  getDiceGroupLabel(count: number, type: DiceType): string {
+    return `${count}${type}`;
+  }
 }

@@ -7,6 +7,14 @@ export interface DiceOption {
   sides: number;
 }
 
+// Dice group for mixed dice calculations
+export interface DiceGroup {
+  id: string;
+  count: number;
+  type: DiceType;
+  sides: number;
+}
+
 // Probability results
 export interface ProbabilityResult {
   result: number;

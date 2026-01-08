@@ -37,30 +37,38 @@
     order: 2;
   }
   
-  .left-column > .input-group:nth-of-type(3) {
+  .left-column > .dice-list-controls {
     order: 3;
+  }
+  
+  .left-column > .dice-list {
+    order: 4;
+  }
+  
+  .left-column > .input-group:nth-of-type(3) {
+    order: 5;
   }
   
   /* Then right column elements */
   .right-column > .input-group:nth-of-type(1) {
-    order: 4;
-  }
-  
-  .right-column > .input-group:nth-of-type(2) {
-    order: 5;
-  }
-  
-  .right-column > .roll-mode-group {
     order: 6;
   }
   
-  .right-column > app-goal-result {
+  .right-column > .input-group:nth-of-type(2) {
     order: 7;
+  }
+  
+  .right-column > .roll-mode-group {
+    order: 8;
+  }
+  
+  .right-column > app-goal-result {
+    order: 9;
   }
   
   /* Finally the table at the very end */
   .left-column > app-probability-table {
-    order: 8;
+    order: 10;
   }
 }
 
@@ -304,6 +312,159 @@
   .roll-mode-group label {
     margin-bottom: 0;
   }
+}
+
+/* Dice list controls */
+.dice-list-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.add-dice-button,
+.clear-dice-button {
+  flex: 1;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.add-dice-button {
+  background: #4CAF50;
+  color: white;
+}
+
+.add-dice-button:hover:not(:disabled) {
+  background: #45a049;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(76, 175, 80, 0.3);
+}
+
+.add-dice-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.add-dice-button:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.clear-dice-button {
+  background: #f44336;
+  color: white;
+}
+
+.clear-dice-button:hover:not(:disabled) {
+  background: #da190b;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(244, 67, 54, 0.3);
+}
+
+.clear-dice-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.clear-dice-button:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Dark mode button styles */
+:host-context(body.dark-mode) .add-dice-button:disabled,
+:host-context(body.dark-mode) .clear-dice-button:disabled {
+  background: #555555;
+}
+
+/* Dice list */
+.dice-list {
+  background: #f5f5f5;
+  border-radius: 6px;
+  padding: 12px;
+  transition: background-color 0.3s ease;
+}
+
+:host-context(body.dark-mode) .dice-list {
+  background: #1a1a1a;
+}
+
+.dice-list-header {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #666;
+}
+
+:host-context(body.dark-mode) .dice-list-header {
+  color: #aaa;
+}
+
+.dice-list-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dice-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 6px 10px 6px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+:host-context(body.dark-mode) .dice-item {
+  background: #2a2a2a;
+  border-color: #444;
+}
+
+.dice-item:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dice-label {
+  color: #333;
+  font-family: 'Courier New', monospace;
+}
+
+:host-context(body.dark-mode) .dice-label {
+  color: #e0e0e0;
+}
+
+.remove-dice-button {
+  background: none;
+  border: none;
+  color: #f44336;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.remove-dice-button:hover {
+  background: #f44336;
+  color: white;
+  transform: scale(1.1);
+}
+
+.remove-dice-button:active {
+  transform: scale(0.95);
 }
 
 @media (min-width: 1024px) {
