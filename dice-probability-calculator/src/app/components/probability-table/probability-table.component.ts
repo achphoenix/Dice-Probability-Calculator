@@ -112,4 +112,36 @@ export class ProbabilityTableComponent {
   shouldBeBold(result: number): boolean {
     return this.highestPercentageResults().has(result);
   }
+
+  getRowStyle(percentage: number): { fontSize: string; opacity: string } {
+    const results = this._results();
+    if (results.length === 0) {
+      return { fontSize: '100%', opacity: '1' };
+    }
+
+    // Find min and max percentages for scaling
+    const percentages = results.map(r => r.percentage);
+    const maxPercentage = Math.max(...percentages);
+    const minPercentage = Math.min(...percentages);
+    const range = maxPercentage - minPercentage;
+
+    // Avoid division by zero if all percentages are the same
+    if (range === 0) {
+      return { fontSize: '100%', opacity: '1' };
+    }
+
+    // Normalize the percentage to a 0-1 scale
+    const normalized = (percentage - minPercentage) / range;
+
+    // Font size: 90% (low) to 115% (high)
+    const fontSize = 90 + (normalized * 25);
+
+    // Opacity: 0.5 (low) to 1.0 (high)
+    const opacity = 0.5 + (normalized * 0.5);
+
+    return {
+      fontSize: `${fontSize}%`,
+      opacity: opacity.toFixed(2)
+    };
+  }
 }
