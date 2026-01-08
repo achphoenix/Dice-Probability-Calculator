@@ -17,6 +17,10 @@ export class GoalResultComponent {
     if (probability > 0 && probability < 0.001) {
       return '<0.1';
     }
+    // Check raw probability to see if it's very high but not exactly 100%
+    if (probability < 1 && probability > 0.999) {
+      return '>99.9';
+    }
     return percentage.toFixed(1);
   }
 
